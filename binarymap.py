@@ -43,6 +43,9 @@ def binarymap(obj, xin_0):
     	Hk_33 = np.fft.fft(obj.h33_n, obj.NFFT)
 
     	spatial.H_k = np.zeros((4,4,62), dtype = complex) #Need to make this complex. Creates three denominational array.
+        spatial.U = np.zeros((4,4,62), dtype = complex) 
+        spatial.S = np.zeros((4,4,62), dtype = complex)
+        spatial.V = np.zeros((4,4,62), dtype = complex)  
 
     	spatial.H_k[0,0,:] = Hk_00[np.array([spatial.BinsUsedMatlab])]
     	spatial.H_k[0,1,:] = Hk_01[np.array([spatial.BinsUsedMatlab])]
@@ -72,8 +75,13 @@ def binarymap(obj, xin_0):
     	A33 = np.zeros(len(A_3))
     	A44 = np.zeros(len(A_4))
     	
-    	#for i in range(1,spatial.H_k.shape[2]+1):
-    		#[spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] #add single value decomposition 
+    	for i in range(0,spatial.H_k.shape[2]):
+            
+            [spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] = np.linalg.svd(spatial.H_k[:,:,i], full_matrices = False) #add single value decomposition 
+            enc = spatial.V[:,:,i] * np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]])
+            
+            
+
 		
 
 	return obj
