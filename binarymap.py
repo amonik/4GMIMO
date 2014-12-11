@@ -63,8 +63,10 @@ def binarymap(obj, xin_0):
     	spatial.H_k[3,1,:] = Hk_31[np.array([spatial.BinsUsedMatlab])]
     	spatial.H_k[3,2,:] = Hk_32[np.array([spatial.BinsUsedMatlab])]
     	spatial.H_k[3,3,:] = Hk_33[np.array([spatial.BinsUsedMatlab])]
+        
         #print spatial.H_k.shape
-    	A_1 = d_bpsk[0::4] #breaks up the data into 240 chunks 
+    	
+        A_1 = d_bpsk[0::4] #breaks up the data into 240 chunks 
     	A_2 = d_bpsk[1::4]
     	A_3 = d_bpsk[2::4]
     	A_4 = d_bpsk[3::4]
@@ -78,10 +80,11 @@ def binarymap(obj, xin_0):
     
     	for i in range(0,spatial.H_k.shape[2]):
             
-            [spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] = np.linalg.svd(spatial.H_k[:,:,i], full_matrices = False) #add single value decomposition 
+            [spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] = np.linalg.svd(spatial.H_k[:,:,i]) #add single value decomposition 
             enc = np.dot(spatial.V[:,:,i], np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]]))
             #print spatial.V.shape
             #print spatial.V
+            #print (np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]])).shape
             print enc.shape
             
             
