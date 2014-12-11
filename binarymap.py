@@ -7,7 +7,7 @@ from spatial import spatial
 def binarymap(obj, xin_0):
 
 
-	#print xin_0
+	
 
 	symlength = obj.NFFT + obj.CP
 
@@ -23,7 +23,7 @@ def binarymap(obj, xin_0):
 	for symbs in range(1,obj.L+1):
 		spatial.xin = xin_0[(symbs - 1)*No_Bits:symbs*No_Bits]
 		d_bpsk = 2*np.array(spatial.xin) -1
-		
+		#print np.array(d_bpsk).size
 
 		Hk_00 = np.fft.fft(obj.h00_n, obj.NFFT) #64 point FFT of all 16 time domain channels
     	Hk_01 = np.fft.fft(obj.h01_n, obj.NFFT)
@@ -63,12 +63,12 @@ def binarymap(obj, xin_0):
     	spatial.H_k[3,1,:] = Hk_31[np.array([spatial.BinsUsedMatlab])]
     	spatial.H_k[3,2,:] = Hk_32[np.array([spatial.BinsUsedMatlab])]
     	spatial.H_k[3,3,:] = Hk_33[np.array([spatial.BinsUsedMatlab])]
-
+        #print spatial.H_k.shape
     	A_1 = d_bpsk[0::4] #breaks up the data into 240 chunks 
     	A_2 = d_bpsk[1::4]
     	A_3 = d_bpsk[2::4]
     	A_4 = d_bpsk[3::4]
-
+        
         
 
     	A11 = np.zeros(len(A_1))
@@ -79,14 +79,12 @@ def binarymap(obj, xin_0):
     	for i in range(0,spatial.H_k.shape[2]):
             
             [spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] = np.linalg.svd(spatial.H_k[:,:,i], full_matrices = False) #add single value decomposition 
-            enc = spatial.V[:,:,i] * np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]])
-            #print len(enc[0])
-
+            enc = np.dot(spatial.V[:,:,i], np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]]))
+            #print spatial.V.shape
+            #print spatial.V
+            print enc.shape
             
-            A11 = enc[0]
-            A22 = enc[1]
-            A33 = enc[2]
-            A44 = enc[3]
+            
         '''
         spatial.f1[symbs, spatial.BinsUsedMatlab] = A11 #Taking 62 elements (corresponding to the 62 bins used for each of the 140 symbols) from each of the 140 rows to send to each antenna.
         spatial.f2[symbs, spatial.BinsUsedMatlab] = A22
