@@ -80,6 +80,7 @@ def binarymap(obj, xin_0):
     
     	for i in range(0,spatial.H_k.shape[2]):
             
+<<<<<<< HEAD
             [spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] = np.linalg.svd(spatial.H_k[:,:,i]) #add single value decomposition 
             enc = np.dot(spatial.V[:,:,i], np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]]))
             #print spatial.V.shape
@@ -94,6 +95,25 @@ def binarymap(obj, xin_0):
         spatial.f3[symbs, spatial.BinsUsedMatlab] = A33
         spatial.f4[symbs, spatial.BinsUsedMatlab] = A44
          '''   
+=======
+            [spatial.U[:,:,i], spatial.S[:,:,i], spatial.V[:,:,i]] = np.linalg.svd(spatial.H_k[:,:,i], full_matrices = False) #add single value decomposition 
+            enc = np.dot(spatial.V[:,:,i], np.array([[A_1[i]],[A_2[i]],[A_3[i]],[A_4[i]]])).flatten()
+            #print spatial.V.shape
+            #print spatial.V
+            #print enc.shape
+            A11[i] = enc[0]
+            A22[i] = enc[1]
+            A33[i] = enc[2]
+            A44[i] = enc[3]
+        
+        spatial.f1 = np.zeros((obj.L,len(spatial.BinsUsedMatlab)))
+        #print spatial.f1.shape
+        #spatial.f1[symbs, spatial.BinsUsedMatlab] = A11 #Taking 62 elements (corresponding to the 62 bins used for each of the 140 symbols) from each of the 140 rows to send to each antenna.
+        #spatial.f2[symbs, spatial.BinsUsedMatlab] = A22
+        #spatial.f3[symbs, spatial.BinsUsedMatlab] = A33
+        #spatial.f4[symbs, spatial.BinsUsedMatlab] = A44
+          
+>>>>>>> 27e6745ef087c85974c25f3080c28afb94240e0e
 
 		
 
